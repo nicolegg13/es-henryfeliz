@@ -18,7 +18,7 @@
 </head>
 
 <body class="flex items-center justify-center w-full h-[100vh]">
-    <div class="card bg-primary mx-[10%] h-[80%]">
+    <div class="card bg-primary mx-[10%] h-[75%]">
         <ul class="nav flex items-center justify-between mb-3">
             <div class="flex flex-nowrap">
                 <li class="nav-item">
@@ -40,26 +40,20 @@
                 <h1>EVASÃO 360</h1>
             </div>
 
-            <div class="flex items-center justify-between w-full relative">
-                <div class="absolute left-1/2 transform -translate-x-1/2">
+            <div class="flex items-center justify-between w-full">
+                <div>
                     <h3 class="text-secondary"><i>Alunos com risco de evasão</i></h3>
                 </div>
 
-                <div></div>
+                
 
                 <div class="flex flex-nowrap gap-1">
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>Selecione</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select id="selectAlunos" class="form-select" aria-label="Selecione um aluno">
+                        <option selected>Todos</option>
                     </select>
 
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>Curso</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <select id="selectCursos" class="form-select" aria-label="Selecione um curso">
+                        <option selected>Todos</option>
                     </select>
                 </div>
             </div>
@@ -79,25 +73,46 @@
                     <tbody id="table-body">
                     </tbody>
                 </table>
-            </div>
-            
-            
-            
+            </div> 
         </div>
 
             
-                <div class="display: inline-block">
-                        <img src="img/losango.png" class="float-left" alt="coiso la" style="width: 40px; height: 60px; padding-top: 15px;">
-                        <p style="padding-top: 20px; padding-left: 50px;">Tutorial risco</p>
-                </div>
+        <div class="pt-3">
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#tutorialModal">
+                <img src="img/losango.png" class="float-left" alt="coiso la" style="width: 40px; height: 60px; padding-top: 15px;">
+                <p style="padding-top: 20px; padding-left: 50px;">Tutorial risco</p>
+            </button>
+        </div>
     </div>
 
     <div class="modal fade" id="studentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="studentModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body" id="modal-body-content">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="tutorialModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="tutorialModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body" id="modal-body-content">
+                    <div class="flex justify-end w-full">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+                    </div>
+
+                    <div class="ml-2">
+                        <h4 class="text-red-500"><i class="fa-solid fa-triangle-exclamation"></i> Alto</h4>
+                            <p class="text-dark">Risco acima ou igual a 0.7 (70%).</p>
+                        <h4 class="text-yellow-500"><i class="fa-solid fa-triangle-exclamation"></i> Moderado</h4>
+                            <p class="text-dark">Risco entre 0.3 e 0.7 (30% - 70%).</p>
+                        <h4 class="text-blue-500"><i class="fa-solid fa-triangle-exclamation"></i> Baixo</h4>
+                            <p class="text-dark">Risco abaixo de 0.3 (30%).</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,6 +136,25 @@
     { matricula: "2023002", nome: "Bruno Lima", curso: "Engenharia Civil", risco: 0.45, email: "bruno.lima@ufsm.br", cpf: "222.333.444-55", nascimento: "20/07/2001", telefone: "(55) 99999-0002", endereco: "Rua B, 456", frequencia: "88%", media: "7.2" },
     { matricula: "6546465", nome: "Henry", curso: "Sistemas para Internet", risco: 0.85, email: "henry@ufsm.br", cpf: "999.999.999-99", nascimento: "12/05/1912", telefone: "(55) 99999-9999", endereco: "R. dos Bobos, 0", frequencia: "55%", media: "6.2" },    
     ];
+
+    const selectAlunos = document.getElementById("selectAlunos");
+    const selectCursos = document.getElementById("selectCursos");
+
+    alunos.forEach(aluno => {
+      const option = document.createElement("option");
+      option.value = aluno.matricula;
+      option.textContent = `${aluno.nome}`;
+      selectAlunos.appendChild(option);
+    });
+
+    alunos.forEach(aluno => {
+      const option = document.createElement("option");
+      option.value = aluno.matricula;
+      option.textContent = `${aluno.curso}`;
+      selectCursos.appendChild(option);
+    });
+
+
 
     const tbody = document.getElementById('table-body');
     const modalBody = document.getElementById('modal-body-content');
@@ -155,7 +189,7 @@
               <i class="fa-solid ${icone}"></i>
           </td>
           <td>
-              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#studentModal" onclick="showStudentDetails('${aluno.matricula}')">
+              <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#studentModal" onclick="showStudentDetails('${aluno.matricula}')">
                   <i class="fa-solid fa-arrow-up-right-from-square text-secondary"></i>
               </button>
           </td>
